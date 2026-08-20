@@ -56,13 +56,15 @@ export default function FileDropZone({
         }}
         onClick={() => inputRef.current?.click()}
         className={`flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed p-10 text-center transition-colors ${
-          isDragging ? "border-brand-500 bg-brand-50" : "border-slate-300 bg-white"
+          isDragging
+            ? "border-brand-500 bg-brand-50 dark:bg-brand-900/30"
+            : "border-slate-300 bg-white dark:border-slate-600 dark:bg-slate-900"
         }`}
       >
         <span className="rounded-md bg-brand-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-brand-700">
           {label}
         </span>
-        <p className="mt-3 text-xs text-slate-500">{hint}</p>
+        <p className="mt-3 text-xs text-slate-500 dark:text-slate-400">{hint}</p>
         <input
           ref={inputRef}
           type="file"
@@ -79,10 +81,10 @@ export default function FileDropZone({
       {error && <p className="text-sm text-red-600">{error}</p>}
 
       {files.length > 0 && (
-        <ul className="divide-y divide-slate-100 rounded-lg border border-slate-200 bg-white">
+        <ul className="divide-y divide-slate-100 rounded-lg border border-slate-200 bg-white dark:border-slate-700 dark:divide-slate-700 dark:bg-slate-900">
           {files.map((file, i) => (
             <li key={`${file.name}-${i}`} className="flex items-center justify-between px-3 py-2 text-sm">
-              <span className="truncate text-slate-700">{file.name}</span>
+              <span className="truncate text-slate-700 dark:text-slate-200">{file.name}</span>
               <button
                 type="button"
                 onClick={() => removeFile(i)}

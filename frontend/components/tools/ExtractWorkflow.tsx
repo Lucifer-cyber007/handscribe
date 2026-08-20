@@ -8,6 +8,7 @@ import HistoryList from "@/components/HistoryList";
 import TemplateManager from "@/components/tools/TemplateManager";
 import VerificationList from "@/components/VerificationList";
 import { useToast } from "@/components/Toast";
+import { useAuth } from "@/lib/auth";
 import { runWithConcurrency } from "@/lib/concurrency";
 import { ApiError, extractDocument, listHistory, listTemplates } from "@/lib/api";
 import {
@@ -39,6 +40,8 @@ export default function ExtractWorkflow({
   uploadHint,
 }: ExtractWorkflowProps) {
   const { showToast } = useToast();
+  const { user } = useAuth();
+  const canUseTemplates = !!user?.is_subscribed;
 
   const [templates, setTemplates] = useState<Template[]>([]);
   const [selectedTemplateId, setSelectedTemplateId] = useState<string>("");
@@ -70,10 +73,13 @@ export default function ExtractWorkflow({
   };
 
   useEffect(() => {
-    refreshTemplates();
+    // Anonymous/non-subscribed visitors can't see saved templates at all —
+    // don't fire a request that will 401/403 for them on every page load,
+    // just leave the dropdown showing only "Define fields manually".
+    if (canUseTemplates) refreshTemplates();
     refreshHistory();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [canUseTemplates]);
 
   const handleTemplateSelect = (id: string) => {
     setSelectedTemplateId(id);
@@ -135,23 +141,23 @@ export default function ExtractWorkflow({
   return (
     <div className="space-y-10">
       <div>
-        <h1 className="text-2xl font-semibold text-slate-900">{heading}</h1>
-        <p className="mt-1 text-sm text-slate-500">{description}</p>
+        <h1 className="text-2xl font-semibold text-slate-900 dark:text-slate-50">{heading}</h1>
+        <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">{description}</p>
       </div>
 
       <section className="space-y-4">
-        <h2 className="text-lg font-medium text-slate-900">1. Choose fields</h2>
-        <p className="text-sm text-slate-500">
+        <h2 className="text-lg font-medium text-slate-900 dark:text-slate-50">1. Choose fields</h2>
+        <p className="text-sm text-slate-500 dark:text-slate-400">
           For better accuracy, add the fields you want extracted — telling the model
           exactly what to look for makes extraction smoother and faster than leaving it
           to guess the structure on its own.
         </p>
         <div className="flex flex-wrap items-center gap-2">
-          <label className="text-sm text-slate-600">Use a saved template:</label>
+          <label className="text-sm text-slate-600 dark:text-slate-300">Use a saved template:</label>
           <select
             value={selectedTemplateId}
             onChange={(e) => handleTemplateSelect(e.target.value)}
-            className="rounded-md border border-slate-300 px-3 py-1.5 text-sm focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500"
+            className="rounded-md border border-slate-300 px-3 py-1.5 text-sm focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500 dark:border-slate-600"
           >
             <option value="">— Define fields manually —</option>
             {templates.map((t) => (
@@ -181,12 +187,12 @@ export default function ExtractWorkflow({
       </section>
 
       <section className="space-y-4">
-        <h2 className="text-lg font-medium text-slate-900">2. Verify specific data (optional)</h2>
+        <h2 className="text-lg font-medium text-slate-900 dark:text-slate-50">2. Verify specific data (optional)</h2>
         <VerificationList items={verifications} onChange={setVerifications} />
       </section>
 
       <section className="space-y-4">
-        <h2 className="text-lg font-medium text-slate-900">3. Upload documents</h2>
+        <h2 className="text-lg font-medium text-slate-900 dark:text-slate-50">3. Upload documents</h2>
         <BatchImageUpload
           items={items}
           onChange={setItems}
@@ -208,13 +214,13 @@ export default function ExtractWorkflow({
 
       {items.length > 0 && (
         <section className="space-y-4">
-          <h2 className="text-lg font-medium text-slate-900">4. Review & export</h2>
+          <h2 className="text-lg font-medium text-slate-900 dark:text-slate-50">4. Review & export</h2>
           <BatchResultsTable items={items} onChange={setItems} />
         </section>
       )}
 
       <section className="space-y-3">
-        <h2 className="text-lg font-medium text-slate-900">Recent extractions</h2>
+        <h2 className="text-lg font-medium text-slate-900 dark:text-slate-50">Recent extractions</h2>
         <HistoryList items={history} loading={historyLoading} />
       </section>
     </div>

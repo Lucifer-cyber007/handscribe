@@ -122,7 +122,7 @@ def xlsx_to_pdf(file_bytes: bytes, original_filename: str) -> bytes:
 
 _HTML_FETCH_TIMEOUT_SECONDS = 30
 _HTML_MAX_REDIRECTS = 5
-_HTML_USER_AGENT = "Mozilla/5.0 (compatible; HandScribeBot/1.0; +https://handscribe.local)"
+_HTML_USER_AGENT = "Mozilla/5.0 (compatible; PDFBoiiBot/1.0; +https://pdfboii.local)"
 
 
 def _validate_public_url(url: str) -> None:

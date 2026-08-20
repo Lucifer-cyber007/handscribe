@@ -41,14 +41,14 @@ export default function PdfToJpgPage() {
           label="Select PDF file"
         />
         <div>
-          <label className="text-sm text-slate-600">Image quality (DPI)</label>
+          <label className="text-sm text-slate-600 dark:text-slate-300">Image quality (DPI)</label>
           <input
             type="number"
             min={50}
             max={600}
             value={dpi}
             onChange={(e) => setDpi(Number(e.target.value))}
-            className="mt-1 w-full rounded-md border border-slate-300 px-3 py-1.5 text-sm focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500"
+            className="mt-1 w-full rounded-md border border-slate-300 px-3 py-1.5 text-sm focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500 dark:border-slate-600"
           />
         </div>
         <button

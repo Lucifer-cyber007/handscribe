@@ -51,11 +51,11 @@ export default function PageNumbersPage() {
         />
         <div className="grid grid-cols-2 gap-3">
           <div>
-            <label className="text-sm text-slate-600">Position</label>
+            <label className="text-sm text-slate-600 dark:text-slate-300">Position</label>
             <select
               value={position}
               onChange={(e) => setPosition(e.target.value)}
-              className="mt-1 w-full rounded-md border border-slate-300 px-3 py-1.5 text-sm focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500"
+              className="mt-1 w-full rounded-md border border-slate-300 px-3 py-1.5 text-sm focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500 dark:border-slate-600"
             >
               {POSITIONS.map((p) => (
                 <option key={p.value} value={p.value}>
@@ -65,13 +65,13 @@ export default function PageNumbersPage() {
             </select>
           </div>
           <div>
-            <label className="text-sm text-slate-600">Start at</label>
+            <label className="text-sm text-slate-600 dark:text-slate-300">Start at</label>
             <input
               type="number"
               min={1}
               value={startNumber}
               onChange={(e) => setStartNumber(Number(e.target.value))}
-              className="mt-1 w-full rounded-md border border-slate-300 px-3 py-1.5 text-sm focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500"
+              className="mt-1 w-full rounded-md border border-slate-300 px-3 py-1.5 text-sm focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500 dark:border-slate-600"
             />
           </div>
         </div>

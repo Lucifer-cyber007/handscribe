@@ -77,13 +77,15 @@ export default function BatchImageUpload({
         onDrop={handleDrop}
         onClick={() => inputRef.current?.click()}
         className={`flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed p-8 text-center transition-colors ${
-          isDragging ? "border-brand-500 bg-brand-50" : "border-slate-300 bg-white"
+          isDragging
+            ? "border-brand-500 bg-brand-50 dark:bg-brand-900/30"
+            : "border-slate-300 bg-white dark:border-slate-600 dark:bg-slate-900"
         }`}
       >
-        <p className="text-sm font-medium text-slate-700">
+        <p className="text-sm font-medium text-slate-700 dark:text-slate-200">
           Drag & drop up to {maxFiles} files here
         </p>
-        <p className="mt-1 text-xs text-slate-500">{uploadHint}</p>
+        <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">{uploadHint}</p>
         <input
           ref={inputRef}
           type="file"
@@ -101,7 +103,7 @@ export default function BatchImageUpload({
 
       {items.length > 0 && (
         <div className="space-y-2">
-          <div className="flex items-center justify-between text-sm text-slate-600">
+          <div className="flex items-center justify-between text-sm text-slate-600 dark:text-slate-300">
             <span>
               {items.length} file{items.length === 1 ? "" : "s"} selected
               {items.length >= maxFiles ? ` (limit reached)` : ""}
@@ -114,13 +116,13 @@ export default function BatchImageUpload({
               Clear all
             </button>
           </div>
-          <ul className="max-h-64 divide-y divide-slate-100 overflow-y-auto rounded-lg border border-slate-200 bg-white">
+          <ul className="max-h-64 divide-y divide-slate-100 overflow-y-auto rounded-lg border border-slate-200 bg-white dark:border-slate-700 dark:divide-slate-700 dark:bg-slate-900">
             {items.map((item) => (
               <li
                 key={item.id}
                 className="flex items-center justify-between px-3 py-2 text-sm"
               >
-                <span className="truncate text-slate-700">{item.file.name}</span>
+                <span className="truncate text-slate-700 dark:text-slate-200">{item.file.name}</span>
                 <button
                   type="button"
                   onClick={() => removeItem(item.id)}

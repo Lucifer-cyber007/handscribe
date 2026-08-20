@@ -60,7 +60,7 @@ async function buildAndDownloadWorkbook(
   const url = URL.createObjectURL(blob);
   const link = document.createElement("a");
   link.href = url;
-  link.download = "handscribe-tables.xlsx";
+  link.download = "pdfboii-tables.xlsx";
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
@@ -140,19 +140,19 @@ export default function PdfTableToExcel() {
       </button>
 
       {items.length > 0 && (
-        <ul className="divide-y divide-slate-100 rounded-lg border border-slate-200 bg-white text-sm">
+        <ul className="divide-y divide-slate-100 rounded-lg border border-slate-200 bg-white text-sm dark:border-slate-700 dark:divide-slate-700 dark:bg-slate-900">
           {items.map((item) => (
             <li key={item.id} className="flex items-center justify-between px-3 py-2">
-              <span className="truncate text-slate-700">{item.file.name}</span>
+              <span className="truncate text-slate-700 dark:text-slate-200">{item.file.name}</span>
               <span
                 className={
                   item.status === "done"
-                    ? "text-emerald-600"
+                    ? "text-emerald-600 dark:text-emerald-400"
                     : item.status === "error"
-                    ? "text-red-600"
+                    ? "text-red-600 dark:text-red-400"
                     : item.status === "processing"
-                    ? "text-brand-600"
-                    : "text-slate-400"
+                    ? "text-brand-600 dark:text-brand-400"
+                    : "text-slate-400 dark:text-slate-500"
                 }
               >
                 {item.status === "done"

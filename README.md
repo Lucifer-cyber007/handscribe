@@ -1,4 +1,4 @@
-# HandScribe
+# PDFBoii
 
 A full PDF toolkit — merge, split, convert, protect, redact, translate,
 summarize, and more — plus AI-powered extraction that turns scanned or

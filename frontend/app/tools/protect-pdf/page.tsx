@@ -45,12 +45,12 @@ export default function ProtectPdfPage() {
           label="Select PDF file"
         />
         <div>
-          <label className="text-sm text-slate-600">Password</label>
+          <label className="text-sm text-slate-600 dark:text-slate-300">Password</label>
           <input
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="mt-1 w-full rounded-md border border-slate-300 px-3 py-1.5 text-sm focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500"
+            className="mt-1 w-full rounded-md border border-slate-300 px-3 py-1.5 text-sm focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500 dark:border-slate-600"
           />
         </div>
         <button

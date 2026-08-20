@@ -1,8 +1,8 @@
-# HandScribe frontend (Next.js)
+# PDFBoii frontend (Next.js)
 
 Dynamic field builder, batch image/PDF upload, standalone value
 verification, and an editable review screen with CSV/Excel export for the
-HandScribe handwriting-to-structured-text app.
+PDFBoii handwriting-to-structured-text app.
 
 ## Setup
 
@@ -35,5 +35,5 @@ first — the app calls it directly from the browser.
 
 1. Import this repo into Vercel, set the project root to `frontend/`.
 2. Set the environment variable `NEXT_PUBLIC_API_BASE_URL` to your deployed
-   Railway backend URL (e.g. `https://handscribe-backend.up.railway.app`).
+   Railway backend URL (e.g. `https://pdfboii-backend.up.railway.app`).
 3. Deploy. Build command and output are auto-detected for Next.js.

@@ -17,8 +17,8 @@ export default function PdfToExcelPage() {
       </Link>
 
       <div>
-        <h1 className="text-2xl font-semibold text-slate-900">PDF to Excel</h1>
-        <p className="mt-1 text-sm text-slate-500">
+        <h1 className="text-2xl font-semibold text-slate-900 dark:text-slate-50">PDF to Excel</h1>
+        <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
           Choose the option that matches your PDF, then convert it to Excel.
         </p>
       </div>
@@ -29,12 +29,12 @@ export default function PdfToExcelPage() {
           onClick={() => setMode("normal")}
           className={`rounded-lg border p-4 text-left transition-colors ${
             mode === "normal"
-              ? "border-brand-500 bg-brand-50 ring-1 ring-brand-500"
-              : "border-slate-200 bg-white hover:border-slate-300"
+              ? "border-brand-500 bg-brand-50 ring-1 ring-brand-500 dark:bg-brand-900/30"
+              : "border-slate-200 bg-white hover:border-slate-300 dark:border-slate-700 dark:bg-slate-900 dark:hover:border-slate-500"
           }`}
         >
-          <p className="font-medium text-slate-900">Normal PDF</p>
-          <p className="mt-1 text-sm text-slate-500">
+          <p className="font-medium text-slate-900 dark:text-slate-50">Normal PDF</p>
+          <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
             The PDF already has selectable text (e.g. exported from Word, Excel, or a
             website). Converts straight to Excel — no setup needed.
           </p>
@@ -44,12 +44,12 @@ export default function PdfToExcelPage() {
           onClick={() => setMode("ocr")}
           className={`rounded-lg border p-4 text-left transition-colors ${
             mode === "ocr"
-              ? "border-brand-500 bg-brand-50 ring-1 ring-brand-500"
-              : "border-slate-200 bg-white hover:border-slate-300"
+              ? "border-brand-500 bg-brand-50 ring-1 ring-brand-500 dark:bg-brand-900/30"
+              : "border-slate-200 bg-white hover:border-slate-300 dark:border-slate-700 dark:bg-slate-900 dark:hover:border-slate-500"
           }`}
         >
-          <p className="font-medium text-slate-900">Scanned / handwritten (OCR)</p>
-          <p className="mt-1 text-sm text-slate-500">
+          <p className="font-medium text-slate-900 dark:text-slate-50">Scanned / handwritten (OCR)</p>
+          <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
             The PDF is a scan, photo, or handwriting with no selectable text. Uses OCR —
             define the fields you want pulled out first.
           </p>

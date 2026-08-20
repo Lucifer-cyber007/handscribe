@@ -26,34 +26,34 @@ export default function VerificationList({ items, onChange }: VerificationListPr
 
   return (
     <div className="space-y-3">
-      <p className="text-sm text-slate-500">
+      <p className="text-sm text-slate-500 dark:text-slate-400">
         Already know a value and just want to confirm it&apos;s in the document — like a
         specific buyer GSTIN or name? Add it here. This is separate from the fields above and
         isn&apos;t saved to templates.
       </p>
 
       {items.length === 0 && (
-        <p className="text-sm text-slate-400">Nothing to verify yet.</p>
+        <p className="text-sm text-slate-400 dark:text-slate-500">Nothing to verify yet.</p>
       )}
 
       {items.map((item, index) => (
         <div
           key={index}
-          className="flex flex-col gap-3 rounded-lg border border-slate-200 bg-white p-3 sm:flex-row sm:items-center"
+          className="flex flex-col gap-3 rounded-lg border border-slate-200 bg-white p-3 sm:flex-row sm:items-center dark:border-slate-700 dark:bg-slate-900"
         >
           <input
             type="text"
             value={item.label}
             onChange={(e) => updateItem(index, { label: e.target.value })}
             placeholder="Label (e.g. Buyer GSTIN)"
-            className="rounded-md border border-slate-300 px-3 py-2 text-sm focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500 sm:w-48"
+            className="rounded-md border border-slate-300 px-3 py-2 text-sm focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500 sm:w-48 dark:border-slate-600"
           />
           <input
             type="text"
             value={item.value}
             onChange={(e) => updateItem(index, { value: e.target.value })}
             placeholder="Expected value (e.g. 27AAPFU0939F1ZV)"
-            className="flex-1 rounded-md border border-slate-300 px-3 py-2 text-sm focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500"
+            className="flex-1 rounded-md border border-slate-300 px-3 py-2 text-sm focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500 dark:border-slate-600"
           />
           <button
             type="button"

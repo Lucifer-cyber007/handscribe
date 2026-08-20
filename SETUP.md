@@ -1,4 +1,4 @@
-# Setup guide: running HandScribe on a new computer
+# Setup guide: running PDFBoii on a new computer
 
 Everything needed to go from a fresh machine to a running app, including
 the real gotchas hit while building this.
@@ -19,8 +19,8 @@ the real gotchas hit while building this.
 ## 2. Clone the repo
 
 ```bash
-git clone https://github.com/Lucifer-cyber007/handscribe.git
-cd handscribe
+git clone https://github.com/Lucifer-cyber007/pdfboii.git
+cd pdfboii
 ```
 
 ## 3. Google Cloud Vision (OCR) — required

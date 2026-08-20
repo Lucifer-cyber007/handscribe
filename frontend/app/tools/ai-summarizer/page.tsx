@@ -116,17 +116,17 @@ export default function AiSummarizerPage() {
       wide
     >
       <div className="grid gap-6 lg:grid-cols-2">
-        <div className="h-[36rem] overflow-hidden rounded-lg border border-slate-200 bg-slate-50 lg:h-[42rem]">
+        <div className="h-[36rem] overflow-hidden rounded-lg border border-slate-200 bg-slate-50 lg:h-[42rem] dark:border-slate-700 dark:bg-slate-800">
           {pdfUrl && (
             <iframe src={pdfUrl} title={files[0]?.name ?? "PDF preview"} className="h-full w-full" />
           )}
         </div>
 
-        <div className="flex h-[36rem] flex-col rounded-lg border border-slate-200 bg-white lg:h-[42rem]">
+        <div className="flex h-[36rem] flex-col rounded-lg border border-slate-200 bg-white lg:h-[42rem] dark:border-slate-700 dark:bg-slate-900">
           <div className="flex-1 space-y-4 overflow-y-auto p-4">
             <div>
               <div className="flex items-center justify-between">
-                <h2 className="text-sm font-medium text-slate-900">Summary</h2>
+                <h2 className="text-sm font-medium text-slate-900 dark:text-slate-50">Summary</h2>
                 <button
                   type="button"
                   onClick={copySummary}
@@ -135,7 +135,7 @@ export default function AiSummarizerPage() {
                   Copy
                 </button>
               </div>
-              <div className="mt-2 text-slate-700">
+              <div className="mt-2 text-slate-700 dark:text-slate-200">
                 <ChatMarkdown content={summary} />
               </div>
             </div>
@@ -148,17 +148,17 @@ export default function AiSummarizerPage() {
                       {m.content}
                     </div>
                   ) : (
-                    <div key={i} className="mr-6 rounded-lg bg-slate-50 px-3 py-2 text-slate-700">
+                    <div key={i} className="mr-6 rounded-lg bg-slate-50 px-3 py-2 text-slate-700 dark:text-slate-200 dark:bg-slate-800">
                       <ChatMarkdown content={m.content} />
                     </div>
                   )
                 )}
               </div>
             )}
-            {asking && <p className="text-xs text-slate-400">Thinking…</p>}
+            {asking && <p className="text-xs text-slate-400 dark:text-slate-500">Thinking…</p>}
           </div>
 
-          <div className="flex gap-2 border-t border-slate-200 p-3">
+          <div className="flex gap-2 border-t border-slate-200 p-3 dark:border-slate-700">
             <input
               type="text"
               value={question}
@@ -171,7 +171,7 @@ export default function AiSummarizerPage() {
               }}
               placeholder="Ask anything about this document…"
               disabled={asking}
-              className="flex-1 rounded-md border border-slate-300 px-3 py-2 text-sm focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500 disabled:opacity-50"
+              className="flex-1 rounded-md border border-slate-300 px-3 py-2 text-sm focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500 disabled:opacity-50 dark:border-slate-600"
             />
             <button
               type="button"

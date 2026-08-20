@@ -35,13 +35,13 @@ export default function HtmlToPdfPage() {
     >
       <div className="space-y-4">
         <div>
-          <label className="text-sm text-slate-600">Webpage URL</label>
+          <label className="text-sm text-slate-600 dark:text-slate-300">Webpage URL</label>
           <input
             type="url"
             value={url}
             onChange={(e) => setUrl(e.target.value)}
             placeholder="https://example.com"
-            className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 text-sm focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500"
+            className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 text-sm focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500 dark:border-slate-600"
           />
         </div>
         <button

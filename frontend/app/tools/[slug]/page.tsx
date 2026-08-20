@@ -9,7 +9,7 @@ interface ToolPageProps {
 
 export function generateMetadata({ params }: ToolPageProps) {
   const tool = getToolBySlug(params.slug);
-  return { title: tool ? `${tool.title} — HandScribe` : "Tool not found" };
+  return { title: tool ? `${tool.title} — PDFBoii` : "Tool not found" };
 }
 
 export default function ComingSoonToolPage({ params }: ToolPageProps) {

@@ -70,7 +70,7 @@ export default function ComparePdfPage() {
       <div className="space-y-6">
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
-            <label className="text-sm font-medium text-slate-700">First PDF</label>
+            <label className="text-sm font-medium text-slate-700 dark:text-slate-200">First PDF</label>
             <div className="mt-1">
               <FileDropZone
                 files={fileA}
@@ -82,7 +82,7 @@ export default function ComparePdfPage() {
             </div>
           </div>
           <div>
-            <label className="text-sm font-medium text-slate-700">Second PDF</label>
+            <label className="text-sm font-medium text-slate-700 dark:text-slate-200">Second PDF</label>
             <div className="mt-1">
               <FileDropZone
                 files={fileB}
@@ -105,12 +105,12 @@ export default function ComparePdfPage() {
         </button>
 
         {lines && (
-          <div className="max-h-[32rem] overflow-y-auto rounded-lg border border-slate-200 bg-white font-mono text-xs">
+          <div className="max-h-[32rem] overflow-y-auto rounded-lg border border-slate-200 bg-white font-mono text-xs dark:border-slate-700 dark:bg-slate-900">
             {lines.map((line, i) =>
               line.kind === "page-marker" ? (
                 <div
                   key={i}
-                  className="border-y border-slate-200 bg-slate-50 px-3 py-1.5 font-sans text-xs font-medium text-slate-500"
+                  className="border-y border-slate-200 bg-slate-50 px-3 py-1.5 font-sans text-xs font-medium text-slate-500 dark:border-slate-700 dark:text-slate-400 dark:bg-slate-800"
                 >
                   {line.text}
                 </div>
@@ -119,10 +119,10 @@ export default function ComparePdfPage() {
                   key={i}
                   className={`whitespace-pre-wrap px-3 py-1 ${
                     line.kind === "removed"
-                      ? "bg-red-50 text-red-700"
+                      ? "bg-red-50 text-red-700 dark:bg-red-950/40 dark:text-red-300"
                       : line.kind === "added"
-                      ? "bg-emerald-50 text-emerald-700"
-                      : "text-slate-600"
+                      ? "bg-emerald-50 text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300"
+                      : "text-slate-600 dark:text-slate-300"
                   }`}
                 >
                   {line.kind === "removed" ? "− " : line.kind === "added" ? "+ " : "  "}

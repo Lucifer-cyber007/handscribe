@@ -78,7 +78,7 @@ export default function BatchResultsTable({ items, onChange }: BatchResultsTable
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
-    link.download = "handscribe-extraction.csv";
+    link.download = "pdfboii-extraction.csv";
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -133,7 +133,7 @@ export default function BatchResultsTable({ items, onChange }: BatchResultsTable
       const url = URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.href = url;
-      link.download = "handscribe-extraction.xlsx";
+      link.download = "pdfboii-extraction.xlsx";
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -146,7 +146,7 @@ export default function BatchResultsTable({ items, onChange }: BatchResultsTable
   return (
     <div className="space-y-3">
       <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-        <p className="text-sm text-slate-600">
+        <p className="text-sm text-slate-600 dark:text-slate-300">
           {doneCount} processed
           {errorCount > 0 && `, ${errorCount} failed`}
           {pendingCount > 0 && `, ${pendingCount} pending`}
@@ -158,7 +158,7 @@ export default function BatchResultsTable({ items, onChange }: BatchResultsTable
             type="button"
             onClick={exportCsv}
             disabled={doneCount === 0}
-            className="rounded-md border border-slate-300 px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-100 disabled:opacity-50"
+            className="rounded-md border border-slate-300 px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-100 disabled:opacity-50 dark:hover:bg-slate-800 dark:border-slate-600 dark:text-slate-200"
           >
             Export CSV
           </button>
@@ -174,9 +174,9 @@ export default function BatchResultsTable({ items, onChange }: BatchResultsTable
         </div>
       </div>
 
-      <div className="overflow-x-auto rounded-lg border border-slate-200 bg-white">
+      <div className="overflow-x-auto rounded-lg border border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-900">
         <table className="w-full text-sm">
-          <thead className="bg-slate-50 text-left text-xs uppercase tracking-wide text-slate-500">
+          <thead className="bg-slate-50 text-left text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400 dark:bg-slate-800">
             <tr>
               <th className="whitespace-nowrap px-4 py-2">Source File</th>
               {fieldNames.map((name) => (
@@ -191,17 +191,19 @@ export default function BatchResultsTable({ items, onChange }: BatchResultsTable
               ))}
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-100">
+          <tbody className="divide-y divide-slate-100 dark:divide-slate-700">
             {items.map((item) => (
               <tr key={item.id}>
-                <td className="whitespace-nowrap px-4 py-2 font-medium text-slate-700">
+                <td className="whitespace-nowrap px-4 py-2 font-medium text-slate-700 dark:text-slate-200">
                   {item.file.name}
                 </td>
                 {item.status !== "done" || !item.result ? (
                   <td
                     colSpan={fieldNames.length + verificationLabels.length || 1}
                     className={`px-4 py-2 text-xs ${
-                      item.status === "error" ? "text-red-600" : "text-slate-400"
+                      item.status === "error"
+                        ? "text-red-600 dark:text-red-400"
+                        : "text-slate-400 dark:text-slate-500"
                     }`}
                   >
                     {item.status === "error"
@@ -218,11 +220,11 @@ export default function BatchResultsTable({ items, onChange }: BatchResultsTable
                         duplicateInvoiceNumbers.has(field.value.trim());
                       const status = statusOf(field);
                       const bg = isDuplicate
-                        ? "bg-red-100"
+                        ? "bg-red-100 dark:bg-red-900/40"
                         : status === "Check"
-                        ? "bg-orange-100"
+                        ? "bg-orange-100 dark:bg-orange-900/40"
                         : status === "Missing"
-                        ? "bg-red-50"
+                        ? "bg-red-50 dark:bg-red-950/40"
                         : "";
                       return (
                         <td key={field.name} className={`px-2 py-1 ${bg}`}>
@@ -230,7 +232,7 @@ export default function BatchResultsTable({ items, onChange }: BatchResultsTable
                             type="text"
                             value={field.value}
                             onChange={(e) => updateFieldValue(item.id, fieldIndex, e.target.value)}
-                            className="w-32 rounded border border-transparent bg-transparent px-1.5 py-1 focus:border-brand-500 focus:bg-white focus:outline-none focus:ring-1 focus:ring-brand-500"
+                            className="w-32 rounded border border-transparent bg-transparent px-1.5 py-1 focus:border-brand-500 focus:bg-white focus:outline-none focus:ring-1 focus:ring-brand-500 dark:focus:bg-slate-800"
                           />
                         </td>
                       );
@@ -239,7 +241,9 @@ export default function BatchResultsTable({ items, onChange }: BatchResultsTable
                       <td
                         key={v.label}
                         className={`whitespace-nowrap px-4 py-2 text-xs ${
-                          v.found ? "text-emerald-700" : "text-red-600"
+                          v.found
+                            ? "text-emerald-700 dark:text-emerald-400"
+                            : "text-red-600 dark:text-red-400"
                         }`}
                       >
                         {v.found ? "✓ Found" : "✗ Not found"}

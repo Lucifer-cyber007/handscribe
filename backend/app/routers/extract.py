@@ -4,11 +4,12 @@ from fastapi import APIRouter, Depends, File, Form, HTTPException, UploadFile
 from pydantic import ValidationError
 from sqlalchemy.orm import Session
 
+from app.auth.dependencies import get_optional_current_user
 from app.config import settings
 from app.database import get_db
 from app.llm.base import LLMStructuringError
 from app.llm.factory import get_llm_provider
-from app.models import Extraction, Template
+from app.models import Extraction, Template, User
 from app.ocr.base import OCRError
 from app.ocr.factory import get_ocr_provider
 from app.schemas import ExtractionResult, FieldsPayload, VerificationItemIn, VerificationResult
@@ -43,6 +44,7 @@ async def extract(
     fields_json: str | None = Form(default=None),
     verifications_json: str | None = Form(default=None),
     db: Session = Depends(get_db),
+    current_user: User | None = Depends(get_optional_current_user),
 ) -> ExtractionResult:
     if image.content_type not in ALLOWED_CONTENT_TYPES:
         raise HTTPException(
@@ -60,8 +62,10 @@ async def extract(
 
     template: Template | None = None
     if template_id:
+        if not current_user:
+            raise HTTPException(401, "Log in to use a saved template.")
         template = db.get(Template, template_id)
-        if not template:
+        if not template or template.user_id != current_user.id:
             raise HTTPException(404, "Template not found.")
         field_defs = [
             {

@@ -1,4 +1,4 @@
-# HandScribe backend (FastAPI)
+# PDFBoii backend (FastAPI)
 
 Converts a handwritten document image into structured field data:
 Google Cloud Vision OCR → LLM structuring/validation (Groq or Gemini) → editable JSON.

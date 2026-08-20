@@ -31,15 +31,15 @@ export default function ChatMarkdown({ content }: { content: string }) {
               <table className="w-full border-collapse text-xs">{children}</table>
             </div>
           ),
-          thead: ({ children }) => <thead className="bg-slate-100">{children}</thead>,
+          thead: ({ children }) => <thead className="bg-slate-100 dark:bg-slate-800">{children}</thead>,
           th: ({ children }) => (
-            <th className="border border-slate-200 px-2 py-1 text-left font-medium">
+            <th className="border border-slate-200 px-2 py-1 text-left font-medium dark:border-slate-700">
               {children}
             </th>
           ),
-          td: ({ children }) => <td className="border border-slate-200 px-2 py-1">{children}</td>,
+          td: ({ children }) => <td className="border border-slate-200 px-2 py-1 dark:border-slate-700">{children}</td>,
           code: ({ children }) => (
-            <code className="rounded bg-slate-100 px-1 py-0.5 text-xs">{children}</code>
+            <code className="rounded bg-slate-100 px-1 py-0.5 text-xs dark:bg-slate-800">{children}</code>
           ),
         }}
       >

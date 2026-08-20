@@ -6,7 +6,28 @@ html {
   color-scheme: light;
 }
 
+html.dark {
+  color-scheme: dark;
+}
+
 body {
-  @apply text-slate-900;
+  @apply text-slate-900 dark:text-slate-50;
   background: linear-gradient(180deg, #ecfdf9 0%, #f8fafc 420px);
+}
+
+.dark body {
+  background: linear-gradient(180deg, #0b1615 0%, #0f1a1a 420px, #0b1312 100%);
+}
+
+/* Safety net so every text-like input/select/textarea gets a correct dark
+   background automatically, rather than depending on each one remembering
+   its own dark: classes — a specific dark: utility on an individual field
+   (e.g. a focus-state override) still wins, since Tailwind's compiled
+   utility selectors are more specific than this plain type selector. */
+@layer base {
+  .dark input:not([type="checkbox"]):not([type="radio"]):not([type="file"]),
+  .dark select,
+  .dark textarea {
+    @apply bg-slate-800 text-slate-100 placeholder-slate-500;
+  }
 }

@@ -89,7 +89,7 @@ class Settings:
         self.google_translate_project_id: str | None = os.getenv("GOOGLE_TRANSLATE_PROJECT_ID")
         self.google_translate_credentials: str | None = os.getenv("GOOGLE_TRANSLATE_CREDENTIALS")
 
-        self.database_url: str = os.getenv("DATABASE_URL", "sqlite:///./handscribe.db")
+        self.database_url: str = os.getenv("DATABASE_URL", "sqlite:///./pdfboii.db")
         self.cors_origins: list[str] = [
             origin.strip()
             for origin in os.getenv("CORS_ORIGINS", "http://localhost:3000").split(",")
@@ -113,12 +113,24 @@ class Settings:
             os.getenv("GROQ_SUMMARIZER_MAX_COMPLETION_TOKENS", "2048")
         )
 
+        # Signs session JWTs. Unlike GOOGLE_VISION_API_KEY above, a missing
+        # value here shouldn't block every unauthenticated tool from booting
+        # in a fresh checkout — auth is a separable feature — so this falls
+        # back to an obviously-fake dev value instead of failing startup.
+        # MUST be overridden with a real random value before any non-local use.
+        self.session_secret: str = os.getenv("SESSION_SECRET", "dev-insecure-secret-change-me")
+
+        # Google Sign-In is optional — checked at request time inside
+        # routers/auth.py, same pattern as the Translate PDF settings above.
+        # Email/password auth works regardless of whether this is set.
+        self.google_oauth_client_id: str | None = os.getenv("GOOGLE_OAUTH_CLIENT_ID")
+
 
 def load_settings() -> Settings:
     try:
         return Settings()
     except ConfigError as exc:
-        sys.stderr.write(f"\n[HandScribe backend] Startup configuration error:\n  {exc}\n\n")
+        sys.stderr.write(f"\n[PDFBoii backend] Startup configuration error:\n  {exc}\n\n")
         raise SystemExit(1) from exc
 
 

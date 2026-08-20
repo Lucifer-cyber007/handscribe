@@ -45,12 +45,12 @@ export default function ScanToPdfPage() {
           label="Select photos"
           hint="or drop them here — one page per photo, in order"
         />
-        <label className="flex items-center gap-2 text-sm text-slate-600">
+        <label className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-300">
           <input
             type="checkbox"
             checked={enhance}
             onChange={(e) => setEnhance(e.target.checked)}
-            className="h-4 w-4 rounded border-slate-300 text-brand-600 focus:ring-brand-500"
+            className="h-4 w-4 rounded border-slate-300 text-brand-600 focus:ring-brand-500 dark:border-slate-600"
           />
           Auto-enhance (grayscale + contrast boost, like a scanner app)
         </label>

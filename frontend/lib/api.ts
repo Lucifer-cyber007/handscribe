@@ -1,5 +1,6 @@
 import type {
   AskResult,
+  AuthResponse,
   ChatMessage,
   CompareResult,
   ExtractionHistoryItem,
@@ -9,10 +10,17 @@ import type {
   SummaryResult,
   TableExtractionResult,
   Template,
+  User,
   VerificationItem,
 } from "./types";
+import { getToken } from "./authToken";
 
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8000";
+
+function authHeaders(): HeadersInit {
+  const token = getToken();
+  return token ? { Authorization: `Bearer ${token}` } : {};
+}
 
 export class ApiError extends Error {
   status: number;
@@ -53,7 +61,10 @@ async function handleBlobResponse(res: Response): Promise<Blob> {
 }
 
 export async function listTemplates(): Promise<Template[]> {
-  const res = await fetch(`${API_BASE}/api/templates`, { cache: "no-store" });
+  const res = await fetch(`${API_BASE}/api/templates`, {
+    cache: "no-store",
+    headers: authHeaders(),
+  });
   return handleResponse<Template[]>(res);
 }
 
@@ -63,7 +74,7 @@ export async function createTemplate(
 ): Promise<Template> {
   const res = await fetch(`${API_BASE}/api/templates`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: { "Content-Type": "application/json", ...authHeaders() },
     body: JSON.stringify({ name, fields }),
   });
   return handleResponse<Template>(res);
@@ -76,15 +87,53 @@ export async function updateTemplate(
 ): Promise<Template> {
   const res = await fetch(`${API_BASE}/api/templates/${id}`, {
     method: "PUT",
-    headers: { "Content-Type": "application/json" },
+    headers: { "Content-Type": "application/json", ...authHeaders() },
     body: JSON.stringify({ name, fields }),
   });
   return handleResponse<Template>(res);
 }
 
 export async function deleteTemplate(id: string): Promise<void> {
-  const res = await fetch(`${API_BASE}/api/templates/${id}`, { method: "DELETE" });
+  const res = await fetch(`${API_BASE}/api/templates/${id}`, {
+    method: "DELETE",
+    headers: authHeaders(),
+  });
   return handleResponse<void>(res);
+}
+
+export async function signup(email: string, password: string, name: string): Promise<AuthResponse> {
+  const res = await fetch(`${API_BASE}/api/auth/signup`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email, password, name }),
+  });
+  return handleResponse<AuthResponse>(res);
+}
+
+export async function login(email: string, password: string): Promise<AuthResponse> {
+  const res = await fetch(`${API_BASE}/api/auth/login`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email, password }),
+  });
+  return handleResponse<AuthResponse>(res);
+}
+
+export async function googleSignIn(idToken: string): Promise<AuthResponse> {
+  const res = await fetch(`${API_BASE}/api/auth/google`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ id_token: idToken }),
+  });
+  return handleResponse<AuthResponse>(res);
+}
+
+export async function getMe(): Promise<User> {
+  const res = await fetch(`${API_BASE}/api/auth/me`, {
+    cache: "no-store",
+    headers: authHeaders(),
+  });
+  return handleResponse<User>(res);
 }
 
 export async function extractDocument(params: {
@@ -105,6 +154,7 @@ export async function extractDocument(params: {
   }
   const res = await fetch(`${API_BASE}/api/extract`, {
     method: "POST",
+    headers: authHeaders(),
     body: form,
   });
   return handleResponse<ExtractionResult>(res);

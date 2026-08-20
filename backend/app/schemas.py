@@ -6,6 +6,46 @@ from enum import Enum
 from pydantic import BaseModel, Field, field_validator, model_validator
 
 
+_EMAIL_PATTERN = re.compile(r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
+
+
+class SignupRequest(BaseModel):
+    email: str = Field(min_length=3, max_length=255)
+    password: str = Field(min_length=8, max_length=128)
+    name: str = Field(min_length=1, max_length=255)
+
+    @field_validator("email")
+    @classmethod
+    def validate_email_format(cls, v: str) -> str:
+        if not _EMAIL_PATTERN.match(v):
+            raise ValueError("Enter a valid email address.")
+        return v.strip().lower()
+
+
+class LoginRequest(BaseModel):
+    email: str = Field(min_length=1)
+    password: str = Field(min_length=1)
+
+
+class GoogleAuthRequest(BaseModel):
+    id_token: str = Field(min_length=1)
+
+
+class UserOut(BaseModel):
+    id: str
+    email: str
+    name: str
+    is_subscribed: bool
+
+    class Config:
+        from_attributes = True
+
+
+class AuthResponse(BaseModel):
+    access_token: str
+    user: UserOut
+
+
 class FieldType(str, Enum):
     NUMERIC = "numeric"
     ALPHABETIC = "alphabetic"

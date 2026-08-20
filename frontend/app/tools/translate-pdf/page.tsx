@@ -135,11 +135,11 @@ export default function TranslatePdfPage() {
         />
         <div className="grid grid-cols-2 gap-3">
           <div>
-            <label className="text-sm text-slate-600">From</label>
+            <label className="text-sm text-slate-600 dark:text-slate-300">From</label>
             <select
               value={sourceLanguage}
               onChange={(e) => setSourceLanguage(e.target.value)}
-              className="mt-1 w-full rounded-md border border-slate-300 px-3 py-1.5 text-sm focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500"
+              className="mt-1 w-full rounded-md border border-slate-300 px-3 py-1.5 text-sm focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500 dark:border-slate-600"
             >
               <option value="">Auto-detect</option>
               {LANGUAGE_GROUPS.map((g) => (
@@ -154,11 +154,11 @@ export default function TranslatePdfPage() {
             </select>
           </div>
           <div>
-            <label className="text-sm text-slate-600">To</label>
+            <label className="text-sm text-slate-600 dark:text-slate-300">To</label>
             <select
               value={targetLanguage}
               onChange={(e) => setTargetLanguage(e.target.value)}
-              className="mt-1 w-full rounded-md border border-slate-300 px-3 py-1.5 text-sm focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500"
+              className="mt-1 w-full rounded-md border border-slate-300 px-3 py-1.5 text-sm focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500 dark:border-slate-600"
             >
               {LANGUAGE_GROUPS.map((g) => (
                 <optgroup key={g.group} label={g.group}>

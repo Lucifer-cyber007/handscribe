@@ -1,3 +1,15 @@
+export interface User {
+  id: string;
+  email: string;
+  name: string;
+  is_subscribed: boolean;
+}
+
+export interface AuthResponse {
+  access_token: string;
+  user: User;
+}
+
 export type FieldType =
   | "numeric"
   | "alphabetic"

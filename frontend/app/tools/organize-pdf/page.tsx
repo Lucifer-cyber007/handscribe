@@ -49,7 +49,7 @@ export default function OrganizePdfPage() {
           label="Select PDF file"
         />
         <div>
-          <label className="text-sm text-slate-600">
+          <label className="text-sm text-slate-600 dark:text-slate-300">
             Final page order (comma-separated, e.g. <code>3,1,2</code> — omit a page number to
             delete that page)
           </label>
@@ -58,7 +58,7 @@ export default function OrganizePdfPage() {
             value={orderText}
             onChange={(e) => setOrderText(e.target.value)}
             placeholder="e.g. 3,1,2"
-            className="mt-1 w-full rounded-md border border-slate-300 px-3 py-1.5 text-sm focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500"
+            className="mt-1 w-full rounded-md border border-slate-300 px-3 py-1.5 text-sm focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500 dark:border-slate-600"
           />
         </div>
         <button

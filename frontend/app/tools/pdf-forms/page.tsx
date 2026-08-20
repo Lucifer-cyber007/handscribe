@@ -80,15 +80,15 @@ export default function PdfFormsPage() {
         </div>
 
         {fields && fields.length > 0 && (
-          <div className="space-y-4 rounded-lg border border-slate-200 bg-white p-4">
-            <h2 className="text-sm font-medium text-slate-900">
+          <div className="space-y-4 rounded-lg border border-slate-200 bg-white p-4 dark:border-slate-700 dark:bg-slate-900">
+            <h2 className="text-sm font-medium text-slate-900 dark:text-slate-50">
               {fields.length} field{fields.length === 1 ? "" : "s"} found
             </h2>
             <div className="space-y-3">
               {fields.map((field) => (
                 <div key={field.name}>
-                  <label className="text-sm text-slate-600">
-                    {field.name} <span className="text-xs text-slate-400">(page {field.page})</span>
+                  <label className="text-sm text-slate-600 dark:text-slate-300">
+                    {field.name} <span className="text-xs text-slate-400 dark:text-slate-500">(page {field.page})</span>
                   </label>
                   {field.type === "checkbox" ? (
                     <div className="mt-1">
@@ -98,7 +98,7 @@ export default function PdfFormsPage() {
                         onChange={(e) =>
                           setValues({ ...values, [field.name]: e.target.checked ? "true" : "false" })
                         }
-                        className="h-4 w-4 rounded border-slate-300 text-brand-600 focus:ring-brand-500"
+                        className="h-4 w-4 rounded border-slate-300 text-brand-600 focus:ring-brand-500 dark:border-slate-600"
                       />
                     </div>
                   ) : (
@@ -106,7 +106,7 @@ export default function PdfFormsPage() {
                       type="text"
                       value={values[field.name] ?? ""}
                       onChange={(e) => setValues({ ...values, [field.name]: e.target.value })}
-                      className="mt-1 w-full rounded-md border border-slate-300 px-3 py-1.5 text-sm focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500"
+                      className="mt-1 w-full rounded-md border border-slate-300 px-3 py-1.5 text-sm focus:border-brand-500 focus:outline-none focus:ring-1 focus:ring-brand-500 dark:border-slate-600"
                     />
                   )}
                 </div>

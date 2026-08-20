@@ -1,5 +1,5 @@
 """
-HandScribe backend entrypoint.
+PDFBoii backend entrypoint.
 
 Importing app.config at module load time is what makes startup fail fast:
 if GROQ_API_KEY or GOOGLE_APPLICATION_CREDENTIALS is missing/invalid, the
@@ -12,9 +12,9 @@ from fastapi.responses import JSONResponse
 
 from app.config import settings  # noqa: F401  (triggers startup validation)
 from app.database import init_db
-from app.routers import extract, history, pdf_tools, templates
+from app.routers import auth, extract, history, pdf_tools, templates
 
-app = FastAPI(title="HandScribe API", version="1.0.0")
+app = FastAPI(title="PDFBoii API", version="1.0.0")
 
 app.add_middleware(
     CORSMiddleware,
@@ -45,6 +45,7 @@ async def unhandled_exception_handler(request, exc: Exception) -> JSONResponse:
     )
 
 
+app.include_router(auth.router)
 app.include_router(templates.router)
 app.include_router(extract.router)
 app.include_router(history.router)
