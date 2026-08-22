@@ -151,6 +151,53 @@ class RedactPayload(BaseModel):
     terms: list[str] = Field(min_length=1)
 
 
+_EDIT_OBJECT_TYPES = {"text", "rect", "ellipse", "line", "path", "image"}
+
+
+class EditObjectIn(BaseModel):
+    """One annotation placed by the Edit PDF canvas — fields are optional
+    per-type (e.g. only "text" objects have `content`), validated loosely
+    like other ad-hoc payloads in this file rather than one strict model
+    per type, since the frontend already only ever sends the fields that
+    apply to a given `type`."""
+
+    type: str
+    page: int = Field(ge=1)
+    x: float
+    y: float
+    width: float = 0
+    height: float = 0
+    rotation: float = 0
+    # text
+    content: str | None = None
+    fontSize: float | None = None
+    color: list[float] | None = None
+    # shapes (rect/ellipse) and line/path stroke
+    strokeColor: list[float] | None = None
+    strokeWidth: float | None = None
+    fillColor: list[float] | None = None
+    # line
+    x2: float | None = None
+    y2: float | None = None
+    # freehand path
+    points: list[list[float]] | None = None
+    # image
+    dataUrl: str | None = None
+
+    @field_validator("type")
+    @classmethod
+    def validate_type(cls, v: str) -> str:
+        if v not in _EDIT_OBJECT_TYPES:
+            raise ValueError(f"Unknown annotation type '{v}'.")
+        return v
+
+
+class EditOpsPayload(BaseModel):
+    """The full set of annotations sent alongside a /api/pdf/edit upload."""
+
+    objects: list[EditObjectIn] = Field(min_length=1)
+
+
 class DiffSegment(BaseModel):
     type: str  # "equal" | "replace" | "delete" | "insert" (difflib opcode tags)
     a_lines: list[str]

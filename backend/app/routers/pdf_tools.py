@@ -20,6 +20,7 @@ from app.schemas import (
     AskPayload,
     AskResult,
     CompareResult,
+    EditOpsPayload,
     FormFieldsResult,
     OrganizePayload,
     RedactPayload,
@@ -33,7 +34,7 @@ from app.translate.google_translate import (
     TranslationNotConfiguredError,
     translate_pdf as translate_pdf_document,
 )
-from app.utils import compare_ops, markdown_ops, office_ops, pdf_ops, pdfa_ops, powerpoint_ops
+from app.utils import compare_ops, edit_ops, markdown_ops, office_ops, pdf_ops, pdfa_ops, powerpoint_ops
 from app.utils.compare_ops import CompareToolError
 from app.utils.markdown_ops import MarkdownToolError
 from app.utils.office_ops import OfficeToolError
@@ -502,6 +503,27 @@ async def redact(
     except PDFToolError as exc:
         raise HTTPException(400, str(exc)) from exc
     return _pdf_response(result, "redacted.pdf")
+
+
+@router.post("/edit")
+async def edit(
+    file: UploadFile = File(...),
+    edits_json: str = Form(...),
+) -> Response:
+    file_bytes = await _read_checked(file, PDF_CONTENT_TYPE)
+    raw = _parse_json_field("edits_json", edits_json)
+    try:
+        payload = EditOpsPayload.model_validate(
+            {"objects": raw.get("objects", raw) if isinstance(raw, dict) else raw}
+        )
+    except ValidationError as exc:
+        raise HTTPException(422, f"Invalid edits: {exc.errors()}") from exc
+
+    try:
+        result = edit_ops.apply_edits(file_bytes, [o.model_dump() for o in payload.objects])
+    except PDFToolError as exc:
+        raise HTTPException(400, str(exc)) from exc
+    return _pdf_response(result, "edited.pdf")
 
 
 @router.post("/form-fields", response_model=FormFieldsResult)
