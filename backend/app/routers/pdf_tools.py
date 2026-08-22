@@ -33,11 +33,12 @@ from app.translate.google_translate import (
     TranslationNotConfiguredError,
     translate_pdf as translate_pdf_document,
 )
-from app.utils import compare_ops, markdown_ops, office_ops, pdf_ops, powerpoint_ops
+from app.utils import compare_ops, markdown_ops, office_ops, pdf_ops, pdfa_ops, powerpoint_ops
 from app.utils.compare_ops import CompareToolError
 from app.utils.markdown_ops import MarkdownToolError
 from app.utils.office_ops import OfficeToolError
 from app.utils.pdf_ops import PDFToolError
+from app.utils.pdfa_ops import PdfAToolError
 from app.utils.powerpoint_ops import PowerPointToolError
 
 router = APIRouter(prefix="/api/pdf", tags=["pdf-tools"])
@@ -309,6 +310,17 @@ async def repair(file: UploadFile = File(...)) -> Response:
             400, f"Couldn't repair this PDF — it may be too badly damaged: {exc}"
         ) from exc
     return _pdf_response(result, "repaired.pdf")
+
+
+@router.post("/to-pdfa")
+async def to_pdfa(file: UploadFile = File(...)) -> Response:
+    file_bytes = await _read_checked(file, PDF_CONTENT_TYPE)
+    try:
+        result = pdfa_ops.pdf_to_pdfa(file_bytes)
+    except PdfAToolError as exc:
+        status = 503 if "isn't installed" in str(exc) else 400
+        raise HTTPException(status, str(exc)) from exc
+    return _pdf_response(result, "converted-pdfa.pdf")
 
 
 @router.post("/scan-to-pdf")

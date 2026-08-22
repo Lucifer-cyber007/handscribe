@@ -105,6 +105,11 @@ class Settings:
         # neither is found.
         self.libreoffice_path: str | None = os.getenv("LIBREOFFICE_PATH")
 
+        # PDF to PDF/A shells out to Ghostscript. Same optional pattern as
+        # LibreOffice above — auto-detected on PATH or the default Windows
+        # install location if unset.
+        self.ghostscript_path: str | None = os.getenv("GHOSTSCRIPT_PATH")
+
         # AI Summarizer deliberately always calls Groq's openai/gpt-oss-120b
         # directly, regardless of LLM_PROVIDER above (a fixed choice for
         # this one tool, not the app's configurable extraction provider).
