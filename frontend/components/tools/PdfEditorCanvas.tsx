@@ -14,6 +14,8 @@ import {
   Square,
   Trash2,
   Type,
+  ZoomIn,
+  ZoomOut,
 } from "lucide-react";
 import { useToast } from "@/components/Toast";
 import { ApiError, editPdf } from "@/lib/api";
@@ -23,6 +25,9 @@ import { EditObject, RGBColor } from "@/lib/types";
 const RENDER_SCALE = 1.5;
 const THUMB_SCALE = 0.22;
 const MAX_PAGES = 20;
+const MIN_ZOOM = 0.25;
+const MAX_ZOOM = 3;
+const VIEWPORT_PADDING = 48; // matches the p-6 padding around the canvas pair
 
 type Tool = "select" | "text" | "rect" | "ellipse" | "line" | "pen";
 
@@ -169,6 +174,8 @@ function serializePageObjects(canvas: FabricNS.Canvas, page: number): EditObject
   return objects;
 }
 
+const clampZoom = (z: number) => Math.min(MAX_ZOOM, Math.max(MIN_ZOOM, z));
+
 const TOOL_BUTTONS: { tool: Tool; label: string; Icon: typeof MousePointer2 }[] = [
   { tool: "select", label: "Select", Icon: MousePointer2 },
   { tool: "text", label: "Text", Icon: Type },
@@ -187,6 +194,7 @@ export default function PdfEditorCanvas({ file }: { file: File }) {
   const [tool, setTool] = useState<Tool>("select");
   const [downloading, setDownloading] = useState(false);
   const [thumbnails, setThumbnails] = useState<string[]>([]);
+  const [zoom, setZoom] = useState(1);
   const [style, setStyle] = useState<StyleState>({
     strokeColor: "#0d9488",
     fillEnabled: false,
@@ -199,6 +207,8 @@ export default function PdfEditorCanvas({ file }: { file: File }) {
   const fabricElRef = useRef<HTMLCanvasElement>(null);
   const fabricRef = useRef<FabricNS.Canvas | null>(null);
   const imageInputRef = useRef<HTMLInputElement>(null);
+  const viewportRef = useRef<HTMLDivElement>(null);
+  const autoFitDoneRef = useRef(false);
 
   const toolRef = useRef(tool);
   toolRef.current = tool;
@@ -213,6 +223,7 @@ export default function PdfEditorCanvas({ file }: { file: File }) {
   useEffect(() => {
     let cancelled = false;
     setLoading(true);
+    autoFitDoneRef.current = false;
     (async () => {
       const pdfjsLib = await import("pdfjs-dist");
       pdfjsLib.GlobalWorkerOptions.workerSrc = "/pdf.worker.min.mjs";
@@ -285,6 +296,17 @@ export default function PdfEditorCanvas({ file }: { file: File }) {
 
       await page.render({ canvas: pdfCanvasEl, viewport }).promise;
       if (cancelled) return;
+
+      if (!autoFitDoneRef.current) {
+        const container = viewportRef.current;
+        if (container) {
+          const availW = container.clientWidth - VIEWPORT_PADDING * 2;
+          const availH = container.clientHeight - VIEWPORT_PADDING * 2;
+          const fit = Math.min(availW / viewport.width, availH / viewport.height, 1);
+          setZoom(clampZoom(Number.isFinite(fit) && fit > 0 ? fit : 1));
+        }
+        autoFitDoneRef.current = true;
+      }
 
       canvas = new fabric.Canvas(fabricEl, { selection: true });
       fabricRef.current = canvas;
@@ -499,7 +521,10 @@ export default function PdfEditorCanvas({ file }: { file: File }) {
   }
 
   return (
-    <div className="flex flex-col gap-4 lg:flex-row" style={{ minHeight: "65vh" }}>
+    <div
+      className="flex flex-col gap-4 lg:flex-row"
+      style={{ height: "min(82vh, 920px)", minHeight: 520 }}
+    >
       {/* Page thumbnail rail */}
       <div className="order-2 flex gap-2 overflow-x-auto rounded-lg border border-slate-200 bg-white p-2 dark:border-slate-700 dark:bg-slate-900 lg:order-1 lg:w-28 lg:flex-shrink-0 lg:flex-col lg:overflow-y-auto lg:overflow-x-visible">
         {(thumbnails.length ? thumbnails : Array(numPages).fill(null)).map((src, i) => (
@@ -527,7 +552,10 @@ export default function PdfEditorCanvas({ file }: { file: File }) {
       </div>
 
       {/* Canvas viewport with floating toolbar + page nav */}
-      <div className="order-1 relative flex-1 overflow-auto rounded-lg border border-slate-200 bg-slate-100 dark:border-slate-700 dark:bg-slate-950 lg:order-2">
+      <div
+        ref={viewportRef}
+        className="order-1 relative flex-1 overflow-auto rounded-lg border border-slate-200 bg-slate-100 dark:border-slate-700 dark:bg-slate-950 lg:order-2"
+      >
         <div className="sticky top-3 z-10 mx-auto flex w-fit items-center gap-1 rounded-full border border-slate-200 bg-white/95 p-1.5 shadow-md backdrop-blur dark:border-slate-700 dark:bg-slate-900/95">
           {TOOL_BUTTONS.map(({ tool: t, label, Icon }) => (
             <button
@@ -584,7 +612,7 @@ export default function PdfEditorCanvas({ file }: { file: File }) {
         </div>
 
         <div className="flex justify-center p-6">
-          <div className="relative w-fit">
+          <div className="relative w-fit" style={{ zoom }}>
             <canvas ref={pdfCanvasRef} className="block shadow" />
             <canvas ref={fabricElRef} />
           </div>
@@ -611,6 +639,26 @@ export default function PdfEditorCanvas({ file }: { file: File }) {
             className="rounded-full p-1 hover:bg-slate-100 disabled:opacity-30 dark:hover:bg-slate-800"
           >
             <ChevronRight size={18} />
+          </button>
+          <div className="mx-1 h-5 w-px bg-slate-200 dark:bg-slate-700" />
+          <button
+            type="button"
+            onClick={() => setZoom((z) => clampZoom(Number((z - 0.1).toFixed(2))))}
+            disabled={zoom <= MIN_ZOOM}
+            aria-label="Zoom out"
+            className="rounded-full p-1 hover:bg-slate-100 disabled:opacity-30 dark:hover:bg-slate-800"
+          >
+            <ZoomOut size={16} />
+          </button>
+          <span className="w-11 text-center tabular-nums">{Math.round(zoom * 100)}%</span>
+          <button
+            type="button"
+            onClick={() => setZoom((z) => clampZoom(Number((z + 0.1).toFixed(2))))}
+            disabled={zoom >= MAX_ZOOM}
+            aria-label="Zoom in"
+            className="rounded-full p-1 hover:bg-slate-100 disabled:opacity-30 dark:hover:bg-slate-800"
+          >
+            <ZoomIn size={16} />
           </button>
         </div>
       </div>
