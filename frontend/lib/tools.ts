@@ -169,7 +169,7 @@ export const TOOLS: ToolDef[] = [
     title: "Edit PDF",
     description: "Add text, images, shapes, or freehand annotations to a PDF.",
     category: "Edit & Sign",
-    status: "coming-soon",
+    status: "real",
   },
   {
     slug: "sign-pdf",

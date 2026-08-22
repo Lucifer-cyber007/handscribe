@@ -10,6 +10,58 @@ export interface AuthResponse {
   user: User;
 }
 
+export type RGBColor = [number, number, number]; // 0-1 float range
+
+interface EditObjectBase {
+  page: number; // 1-based
+  x: number; // PDF points, top-left origin
+  y: number;
+  width: number;
+  height: number;
+  rotation: number;
+}
+
+export interface TextEditObject extends EditObjectBase {
+  type: "text";
+  content: string;
+  fontSize: number;
+  color: RGBColor;
+}
+
+export interface ShapeEditObject extends EditObjectBase {
+  type: "rect" | "ellipse";
+  strokeColor: RGBColor;
+  strokeWidth: number;
+  fillColor: RGBColor | null;
+}
+
+export interface LineEditObject extends EditObjectBase {
+  type: "line";
+  x2: number;
+  y2: number;
+  strokeColor: RGBColor;
+  strokeWidth: number;
+}
+
+export interface PathEditObject extends EditObjectBase {
+  type: "path";
+  points: [number, number][];
+  strokeColor: RGBColor;
+  strokeWidth: number;
+}
+
+export interface ImageEditObject extends EditObjectBase {
+  type: "image";
+  dataUrl: string;
+}
+
+export type EditObject =
+  | TextEditObject
+  | ShapeEditObject
+  | LineEditObject
+  | PathEditObject
+  | ImageEditObject;
+
 export type FieldType =
   | "numeric"
   | "alphabetic"

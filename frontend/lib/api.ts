@@ -3,6 +3,7 @@ import type {
   AuthResponse,
   ChatMessage,
   CompareResult,
+  EditObject,
   ExtractionHistoryItem,
   ExtractionResult,
   FieldSchema,
@@ -370,6 +371,14 @@ export async function pdfToPdfA(file: File): Promise<Blob> {
   const form = new FormData();
   form.append("file", file);
   const res = await fetch(`${API_BASE}/api/pdf/to-pdfa`, { method: "POST", body: form });
+  return handleBlobResponse(res);
+}
+
+export async function editPdf(file: File, objects: EditObject[]): Promise<Blob> {
+  const form = new FormData();
+  form.append("file", file);
+  form.append("edits_json", JSON.stringify({ objects }));
+  const res = await fetch(`${API_BASE}/api/pdf/edit`, { method: "POST", body: form });
   return handleBlobResponse(res);
 }
 
