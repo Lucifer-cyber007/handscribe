@@ -366,6 +366,13 @@ export async function repairPdf(file: File): Promise<Blob> {
   return handleBlobResponse(res);
 }
 
+export async function pdfToPdfA(file: File): Promise<Blob> {
+  const form = new FormData();
+  form.append("file", file);
+  const res = await fetch(`${API_BASE}/api/pdf/to-pdfa`, { method: "POST", body: form });
+  return handleBlobResponse(res);
+}
+
 export async function scanToPdf(files: File[], enhance: boolean): Promise<Blob> {
   const form = new FormData();
   files.forEach((f) => form.append("files", f));

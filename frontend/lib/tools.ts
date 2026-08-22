@@ -79,7 +79,7 @@ export const TOOLS: ToolDef[] = [
     title: "PDF to PDF/A",
     description: "Convert to the ISO-standardized PDF/A format for long-term archiving.",
     category: "Organize PDF",
-    status: "coming-soon",
+    status: "real",
   },
 
   // Convert to PDF
